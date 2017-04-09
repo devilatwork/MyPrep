@@ -11,34 +11,27 @@ public class BinarySearchTreeIterator {
     TreeNode root= new TreeNode(-1);
     Stack<TreeNode> stack;
     public BinarySearchTreeIterator(TreeNode root) {
-        this.root.left=root;
-        this.stack=new Stack<>();
-        TreeNode x=this.root;
-        while(x!=null){
-            stack.add(x);
-            x=x.left;
-        }
-
+        this.stack=new Stack<TreeNode>();
+        push_left_node(stack,root);
     }
 
     /** @return whether we have a next smallest number */
     public boolean hasNext() {
-        return stack.size()>1;
+        return !stack.empty();
+    }
+    
+    private void push_left_node(Stack<TreeNode> s, TreeNode root){
+        while(root!=null){
+           s.push(root);
+           root = root.left;
+        } 
     }
 
     /** @return the next smallest number */
     public int next() {
-        TreeNode r= stack.pop();
-        if(stack.size()>0){
-            TreeNode peek=stack.peek();
-            peek.left=r.right;
-            TreeNode temp=peek.left;
-            while(temp!=null){
-                stack.add(temp);
-                temp=temp.left;
-            }
-        }
-
+        TreeNode r= stack.peek();
+        stack.pop();
+        push_left_node(stack,r.right);
         return r.val;
     }
 }
